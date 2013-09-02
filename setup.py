@@ -16,6 +16,7 @@ from distutils.command.install import INSTALL_SCHEMES
 
 if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
+
     print("You probably want to also tag the version now:")
     print("  git tag -a %s -m 'version %s'" % (version, version))
     print("  git push --tags")
@@ -87,7 +88,7 @@ setup(
     ],
     cmdclass={'test': RunTests},
     classifiers=[
-        'Development Status :: 1 - Alpha',
+        'Development Status :: 2 - Pre-Alpha',
         'Framework :: Django',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
@@ -98,6 +99,8 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
     ],
     long_description=long_description,
     **extra
