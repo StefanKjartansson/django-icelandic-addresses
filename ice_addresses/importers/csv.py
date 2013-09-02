@@ -4,23 +4,31 @@
 """
 from __future__ import unicode_literals, print_function, absolute_import
 
-import decimal
-import os
 import codecs
 import csv
+import os
+import sys
 
 from ..models import PostCode, Street, Address
 from ..geo import isnet93_to_wgs84
 
 
 DATA_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir, 'data')
+PY3 = (sys.version_info[0] > 2)
 
 
 def csv_unireader(f, encoding="utf-8"):
-    r = csv.reader(codecs.iterencode(codecs.iterdecode(f, encoding), 'utf-8'),
-        delimiter=b'|', quotechar=b'"')
+    if PY3:
+        f = codecs.open(f, encoding=encoding)
+        r = csv.reader(f, delimiter='|', quotechar='"')
+    else:
+        r = csv.reader(codecs.iterencode(codecs.iterdecode(open(f), encoding), 'utf-8'),
+            delimiter=b'|', quotechar=b'"')
     for row in r:
-        yield [e.decode("utf-8") for e in row]
+        if PY3:
+            yield row
+        else:
+            yield [e.decode("utf-8") for e in row]
 
 
 def import_csv(filename=None):
@@ -30,7 +38,7 @@ def import_csv(filename=None):
     if not filename:
         filename = os.path.join(DATA_ROOT, 'Stadfangaskra_20130326.dsv')
 
-    for fields in csv_unireader(open(filename), encoding='iso-8859-1'):
+    for fields in csv_unireader(filename, encoding='iso-8859-1'):
 
         if fields[0] == 'HNITNUM':
             continue
