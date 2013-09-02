@@ -9,8 +9,18 @@ env:
   - DJANGO=Django==1.3 --use-mirrors
   - DJANGO=Django==1.4 --use-mirrors
   - DJANGO=Django==1.5 --use-mirrors
+  - DB=mysql
+  - DB=postgres
+  - DB=sqlite
 
 install:
   - pip install -q $DJANGO
+  - pip install -r requirements.txt
+  - if [[ $DB == 'mysql' ]]; then pip install -q MySQL-python --use-mirrors; fi
+  - if [[ $DB == 'postgres' ]]; then pip install -q psycopg2 --use-mirrors; fi
 
-script: python runtests.py
+before_script:
+  - if [[ $DB == 'mysql' ]]; then mysql -e 'create database ice_address'; fi
+  - if [[ $DB == 'postgres' ]]; then psql -U postgres -c 'create database ice_address;'; fi
+
+script: python setup.py test
