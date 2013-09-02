@@ -4,13 +4,10 @@
 """
 from __future__ import unicode_literals, print_function, absolute_import
 
-import os
-import tempfile
-import shutil
-
-from django.conf import settings
 from django.core.management import call_command
 from django.test import TestCase
+
+from .models import Address, Street
 
 
 class ImportIceAddressTestCase(TestCase):
@@ -20,3 +17,11 @@ class ImportIceAddressTestCase(TestCase):
                      interactive=False,
                      verbosity='0',
                      **kwargs)
+
+        c = Address.objects.filter(
+            street=Street.objects \
+                .filter(name_nominative='Laugavegur') \
+                .filter(postcode__id=101),
+            house_number=1).count()
+
+        self.assertGreater(c, 0)
