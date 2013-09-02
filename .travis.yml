@@ -8,11 +8,12 @@ env:
   global:
     - FOO=bar
   matrix:
-    - DB=mysql
-    - DB=postgres
-    - DB=sqlite
-    - DJANGO=Django==1.4
-    - DJANGO=Django==1.5
+    - DB=mysql DJANGO=Django==1.4
+    - DB=mysql DJANGO=Django==1.5
+    - DB=postgres DJANGO=Django==1.4
+    - DB=postgres DJANGO=Django==1.5
+    - DB=sqlite DJANGO=Django==1.4
+    - DB=sqlite DJANGO=Django==1.5
 
 install:
   - pip install -q $DJANGO --use-mirrors
