@@ -28,7 +28,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('street', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ice_addresses.Street'])),
             ('house_number', self.gf('django.db.models.fields.IntegerField')(default=0)),
-            ('house_characters', self.gf('django.db.models.fields.CharField')(default=u'', max_length=1)),
+            ('house_characters', self.gf('django.db.models.fields.CharField')(default=u'', max_length=3)),
             ('lon', self.gf('django.db.models.fields.FloatField')()),
             ('lat', self.gf('django.db.models.fields.FloatField')()),
         ))
@@ -49,7 +49,7 @@ class Migration(SchemaMigration):
     models = {
         u'ice_addresses.address': {
             'Meta': {'object_name': 'Address'},
-            'house_characters': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '1'}),
+            'house_characters': ('django.db.models.fields.CharField', [], {'default': "u''", 'max_length': '3'}),
             'house_number': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'lat': ('django.db.models.fields.FloatField', [], {}),

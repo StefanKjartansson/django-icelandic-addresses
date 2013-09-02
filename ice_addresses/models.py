@@ -20,6 +20,6 @@ class Street(models.Model):
 class Address(models.Model):
     street = models.ForeignKey(Street)
     house_number = models.IntegerField(default=0)
-    house_characters = models.CharField(max_length=1, default='')
+    house_characters = models.CharField(max_length=3, default='')
     lon = models.FloatField()
     lat = models.FloatField()
