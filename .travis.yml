@@ -23,3 +23,14 @@ before_script:
   - if [[ $DB == 'postgres' ]]; then psql -U postgres -c 'create database ice_address;'; fi
 
 script: python setup.py test
+
+matrix:
+  exclude:
+    - python: 3.3
+      env: DB=mysql DJANGO=Django==1.4
+    - python: 3.3
+      env: DB=mysql DJANGO=Django==1.5
+    - python: 3.3
+      env: DB=postgres DJANGO=Django==1.4
+    - python: 3.3
+      env: DB=sqlite DJANGO=Django==1.4
