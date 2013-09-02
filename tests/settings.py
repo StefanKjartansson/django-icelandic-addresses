@@ -21,13 +21,23 @@ SITE_ID = 300
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+BACKENDS = {
+    'mysql': 'mysql',
+    'postgres': 'postgresql_psycopg2',
+    'sqlite': 'sqlite3',
+}
+
+
+DB_TYPE = BACKENDS.get(os.environ.get("DB", 'postgres'))
+
 
 DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'ENGINE': 'django.db.backends.%s' % DB_TYPE,
             'NAME': 'ice_address',
             }
         }
+
 
 INSTALLED_APPS = (
         'django.contrib.auth',
