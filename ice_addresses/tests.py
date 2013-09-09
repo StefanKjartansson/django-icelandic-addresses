@@ -8,6 +8,15 @@ from django.core.management import call_command
 from django.test import TestCase
 
 from .models import Address, Street
+from .utils import address_exists, string_to_address
+
+
+test_addresses = [
+    'Vatnsstígur 3b, 101',
+    'Vatnsstígur 3b, 101 Reykjavík',
+    'Stóra-Hofi, 851',
+    'Stóra-Hofi, 851 Hellu (dreifbýli)',
+]
 
 
 class ImportIceAddressTestCase(TestCase):
@@ -25,3 +34,10 @@ class ImportIceAddressTestCase(TestCase):
             house_number=1).count()
 
         self.assertGreater(c, 0)
+
+        result, id = address_exists('Laugavegur', 101, 1)
+
+        self.assertTrue(result)
+
+        for x in test_addresses:
+            self.assertIsNotNone(string_to_address(x))
