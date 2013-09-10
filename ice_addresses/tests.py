@@ -39,5 +39,9 @@ class ImportIceAddressTestCase(TestCase):
 
         self.assertTrue(result)
 
+        a = Address.objects.get(pk=id)
+
+        self.assertEqual(str(a), "Laugavegur 1, 101")
+
         for x in test_addresses:
             self.assertIsNotNone(string_to_address(x))
