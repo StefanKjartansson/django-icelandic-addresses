@@ -83,7 +83,7 @@ setup(
     platforms=['any'],
     url='https://github.com/StefanKjartansson/django-icelandic-addresses',
     zip_safe=False,
-    version='0.1.2',
+    version='0.1.4',
     include_package_data=True,
     install_requires=[
     ],
