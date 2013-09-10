@@ -22,7 +22,7 @@ You can get django-icelandic-addresses by using pip or easy_install::
 
  $ pip install django-icelandic-addresses
  or
- $ easy_nstall django-icelandic-addresses
+ $ easy_install django-icelandic-addresses
 
 
 Installing It
