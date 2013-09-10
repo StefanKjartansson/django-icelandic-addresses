@@ -5,14 +5,9 @@ python:
   - "2.7"
 
 env:
-  global:
-    - FOO=bar
   matrix:
-    - DB=mysql DJANGO=Django==1.4
     - DB=mysql DJANGO=Django==1.5
-    - DB=postgres DJANGO=Django==1.4
     - DB=postgres DJANGO=Django==1.5
-    - DB=sqlite DJANGO=Django==1.4
     - DB=sqlite DJANGO=Django==1.5
 
 install:
@@ -30,10 +25,4 @@ script: python setup.py test
 matrix:
   exclude:
     - python: "3.3"
-      env: DB=mysql DJANGO=Django==1.4
-    - python: "3.3"
       env: DB=mysql DJANGO=Django==1.5
-    - python: "3.3"
-      env: DB=postgres DJANGO=Django==1.4
-    - python: "3.3"
-      env: DB=sqlite DJANGO=Django==1.4
