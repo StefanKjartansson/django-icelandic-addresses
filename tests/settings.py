@@ -50,3 +50,9 @@ INSTALLED_APPS = (
 
 USE_TZ = True
 TIME_ZONE = 'UTC'
+
+try:
+    from psycopg2cffi import compat
+    compat.register()
+except ImportError:
+    pass

@@ -3,6 +3,7 @@ language: python
 python:
   - "3.3"
   - "2.7"
+  - "pypy"
 
 env:
   matrix:
@@ -14,7 +15,8 @@ install:
   - pip install -q $DJANGO --use-mirrors
   - pip install -r requirements.txt
   - if [[ $DB == 'mysql' ]]; then pip install -q MySQL-python --use-mirrors; fi
-  - if [[ $DB == 'postgres' ]]; then pip install -q psycopg2 --use-mirrors; fi
+  - if [[ ($DB == 'postgres') && ($TRAVIS_PYTHON_VERSION != "pypy") ]]; then pip install -q psycopg2 --use-mirrors; fi
+  - if [[ ($DB == 'postgres') && ($TRAVIS_PYTHON_VERSION == "pypy") ]]; then pip install -q psycopg2cffi --use-mirrors; fi
 
 before_script:
   - if [[ $DB == 'mysql' ]]; then mysql -e 'create database ice_address'; fi
@@ -26,3 +28,7 @@ matrix:
   exclude:
     - python: "3.3"
       env: DB=mysql DJANGO=Django==1.5
+    - python: "pypy"
+      env: DB=mysql DJANGO=Django==1.5
+    - python: "pypy"
+      env: DB=sqlite DJANGO=Django==1.5
