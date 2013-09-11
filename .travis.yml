@@ -1,9 +1,9 @@
 language: python
 
 python:
-  - "3.3"
-  - "2.7"
-  - "pypy"
+  - 2.7
+  - 3.3
+  - pypy
 
 env:
   matrix:
@@ -15,20 +15,20 @@ install:
   - pip install -q $DJANGO --use-mirrors
   - pip install -r requirements.txt
   - if [[ $DB == 'mysql' ]]; then pip install -q MySQL-python --use-mirrors; fi
-  - if [[ ($DB == 'postgres') && ($TRAVIS_PYTHON_VERSION != "pypy") ]]; then pip install -q psycopg2 --use-mirrors; fi
-  - if [[ ($DB == 'postgres') && ($TRAVIS_PYTHON_VERSION == "pypy") ]]; then pip install -q psycopg2cffi --use-mirrors; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 'pypy' && $DB == 'postgres' ]]; then pip install -q psycopg2cffi --use-mirrors; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 2* && $DB == 'postgres' ]]; then pip install -q psycopg2 --use-mirrors; fi
 
 before_script:
-  - if [[ $DB == 'mysql' ]]; then mysql -e 'create database ice_address'; fi
-  - if [[ $DB == 'postgres' ]]; then psql -U postgres -c 'create database ice_address;'; fi
+  - mysql -e 'create database ice_address';
+  - psql -U postgres -c 'create database ice_address;';
 
 script: python setup.py test
 
 matrix:
   exclude:
-    - python: "3.3"
+    - python: 3.3
       env: DB=mysql DJANGO=Django==1.5
-    - python: "pypy"
+    - python: pypy
       env: DB=mysql DJANGO=Django==1.5
-    - python: "pypy"
+    - python: pypy
       env: DB=sqlite DJANGO=Django==1.5
