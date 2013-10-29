@@ -13,7 +13,8 @@ from ..models import PostCode, Street, Address
 from ..geo import isnet93_to_wgs84
 
 
-DATA_ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir, 'data')
+DATA_ROOT = os.path.join(
+    os.path.abspath(os.path.dirname(__file__)), os.pardir, 'data')
 PY3 = (sys.version_info[0] > 2)
 
 
@@ -22,7 +23,8 @@ def csv_unireader(f, encoding="utf-8"):
         f = codecs.open(f, encoding=encoding)
         r = csv.reader(f, delimiter='|', quotechar='"')
     else:
-        r = csv.reader(codecs.iterencode(codecs.iterdecode(open(f), encoding), 'utf-8'),
+        r = csv.reader(
+            codecs.iterencode(codecs.iterdecode(open(f), encoding), 'utf-8'),
             delimiter=b'|', quotechar=b'"')
     for row in r:
         if PY3:
@@ -67,31 +69,41 @@ def import_csv(filename=None):
             point['lng'],
         ))
 
-    current_code = None
-    pc = None
-    current_names = None
-    s = None
+    uniques = sorted(uniques)
 
-    for code, name1, name2, house_number, house_chars, lat, lng in sorted(uniques):
+    def get_insert_method(model):
 
-        if current_code != code:
-            pc = PostCode(id=code)
-            pc.save()
-            current_code = code
+        if model.objects.count() > 0:
+            return model.objects.get_or_create
 
-        if current_names != (name1, name2):
-            s = Street(
-                postcode=pc,
-                name_nominative=name1,
-                name_genitive=name2)
-            s.save()
-            current_names = (name1, name2)
+        def _wrap(*args, **kwargs):
+            return model.objects.create(*args, **kwargs), True
 
-        Address(
-            street=s,
-            house_number=house_number,
-            house_characters=house_chars,
-            lat=lat,
-            lon=lng).save()
+        return _wrap
+
+    codes = {}
+    _m = get_insert_method(PostCode)
+    for c in set((i[0] for i in uniques)):
+        pc, _ = _m(id=c)
+        codes[c] = pc
+
+    streets = {}
+    _m = get_insert_method(Street)
+
+    for key in set((i[0:3] for i in uniques)):
+        pc, name1, name2 = key
+        s, _ = _m(
+            postcode=codes[pc],
+            name_nominative=name1,
+            name_genitive=name2)
+        streets[key] = s
+
+    _m = get_insert_method(Address)
+    for code, name1, name2, house_number, house_chars, lat, lng in uniques:
+        _m(street=streets[(code, name1, name2)],
+           house_number=house_number,
+           house_characters=house_chars,
+           lat=lat,
+           lon=lng)
 
     return len(uniques)
