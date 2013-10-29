@@ -22,15 +22,16 @@ test_addresses = [
 class ImportIceAddressTestCase(TestCase):
 
     def test_run_mgmt_command(self, **kwargs):
+
         call_command('import_ice_addresses',
                      interactive=False,
                      verbosity='0',
                      **kwargs)
 
         c = Address.objects.filter(
-            street=Street.objects \
-                .filter(name_nominative='Laugavegur') \
-                .filter(postcode__id=101),
+            street=Street.objects
+            .filter(name_nominative='Laugavegur')
+            .filter(postcode__id=101),
             house_number=1).count()
 
         self.assertGreater(c, 0)
@@ -45,3 +46,17 @@ class ImportIceAddressTestCase(TestCase):
 
         for x in test_addresses:
             self.assertIsNotNone(string_to_address(x))
+
+        call_command('import_ice_addresses',
+                     interactive=False,
+                     verbosity='0',
+                     no_override=True,
+                     **kwargs)
+
+        c2 = Address.objects.filter(
+            street=Street.objects
+            .filter(name_nominative='Laugavegur')
+            .filter(postcode__id=101),
+            house_number=1).count()
+
+        self.assertEqual(c, c2)
