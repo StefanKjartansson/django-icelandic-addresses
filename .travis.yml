@@ -1,14 +1,22 @@
 language: python
 
+sudo: false
+
 python:
   - 2.7
-  - 3.3
+  - 3.4
 
 env:
   matrix:
-    - DB=mysql DJANGO=Django==1.5
-    - DB=postgres DJANGO=Django==1.5
-    - DB=sqlite DJANGO=Django==1.5
+    - DB=mysql DJANGO=Django>=1.5,<1.6
+    - DB=postgres DJANGO=Django>=1.5,<1.6
+    - DB=sqlite DJANGO=Django>=1.5,<1.6
+    - DB=mysql DJANGO=Django>=1.6,<1.7
+    - DB=postgres DJANGO=Django>=1.6,<1.7
+    - DB=sqlite DJANGO=Django>=1.6,<1.7
+    - DB=mysql DJANGO=Django>=1.7,<1.8
+    - DB=postgres DJANGO=Django>=1.7,<1.8
+    - DB=sqlite DJANGO=Django>=1.7,<1.8
 
 install:
   - pip install -q $DJANGO --use-mirrors
