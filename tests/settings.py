@@ -40,6 +40,10 @@ DATABASES = {
         }
 
 
+if DB_TYPE == 'sqlite3':
+    DATABASES['default']['NAME'] = ':memory:'
+
+
 INSTALLED_APPS = (
         'django.contrib.auth',
         'django.contrib.contenttypes',
@@ -48,7 +52,7 @@ INSTALLED_APPS = (
 )
 
 import django
-version_info = map(int, django.get_version().split('.'))
+version_info = list(map(int, django.get_version().split('.')))
 if version_info[0] == 1 and version_info[1] < 7:
     INSTALLED_APPS += ('south',)
 
