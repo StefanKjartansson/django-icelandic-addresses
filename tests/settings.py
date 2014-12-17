@@ -27,6 +27,7 @@ BACKENDS = {
     'sqlite': 'sqlite3',
 }
 
+MIDDLEWARE_CLASSES = []
 
 DB_TYPE = BACKENDS.get(os.environ.get("DB", 'postgres'))
 
@@ -44,9 +45,14 @@ INSTALLED_APPS = (
         'django.contrib.contenttypes',
         'django.contrib.sessions',
         'django.contrib.sites',
-        'south',
-        'ice_addresses',
 )
+
+import django
+version_info = map(int, django.get_version().split('.'))
+if version_info[0] == 1 and version_info[1] < 7:
+    INSTALLED_APPS += ('south',)
+
+INSTALLED_APPS += ('ice_addresses',)
 
 USE_TZ = True
 TIME_ZONE = 'UTC'
