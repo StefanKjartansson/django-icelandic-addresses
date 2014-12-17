@@ -19,10 +19,10 @@ env:
     - DB=sqlite DJANGO="Django>=1.7,<1.8"
 
 install:
-  - pip install -q $DJANGO --use-mirrors
+  - pip install -q $DJANGO
   - pip install -r requirements.txt
-  - if [[ $DB == 'mysql' ]]; then pip install -q MySQL-python --use-mirrors; fi
-  - if [[ $DB == 'postgres' ]]; then pip install -q psycopg2 --use-mirrors; fi
+  - if [[ $DB == 'mysql' ]]; then pip install -q MySQL-python; fi
+  - if [[ $DB == 'postgres' ]]; then pip install -q psycopg2; fi
 
 before_script:
   - mysql -e 'create database ice_address';
