@@ -40,6 +40,10 @@ To enable `ice_addresses` in your project you need to add it to `INSTALLED_APPS`
 Using It
 ========
 
+Run migrations::
+
+ $ python manage.py migrate ice_addresses
+
 Import data from staðfangaskrá::
 
  $ python manage.py import_ice_addresses
