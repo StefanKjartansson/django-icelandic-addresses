@@ -10,7 +10,6 @@ import os
 import sys
 
 from ..models import PostCode, Street, Address
-from ..geo import isnet93_to_wgs84
 
 
 DATA_ROOT = os.path.join(
@@ -38,7 +37,7 @@ def import_csv(filename=None):
     uniques = set()
 
     if not filename:
-        filename = os.path.join(DATA_ROOT, 'Stadfangaskra_20130326.dsv')
+        filename = os.path.join(DATA_ROOT, 'Stadfangaskra_20131028.dsv')
 
     for fields in csv_unireader(filename, encoding='iso-8859-1'):
 
@@ -55,18 +54,14 @@ def import_csv(filename=None):
         except ValueError:
             house_number = 0
 
-        point = isnet93_to_wgs84(
-            float(fields[-2].replace(',', '.')),
-            float(fields[-1].replace(',', '.')))
-
         uniques.add((
             postcode,
             fields[8].strip(),
             fields[9].strip(),
             house_number,
             fields[11].strip(),
-            point['lat'],
-            point['lng'],
+            float(fields[-2].replace(',', '.')),
+            float(fields[-1].replace(',', '.')),
         ))
 
     uniques = sorted(uniques)
