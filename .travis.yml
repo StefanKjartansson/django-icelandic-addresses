@@ -34,5 +34,7 @@ matrix:
   exclude:
     - python: 3.4
       env: DB=mysql DJANGO="Django>=1.5,<1.6"
+    - python: 3.4
       env: DB=mysql DJANGO="Django>=1.6,<1.7"
+    - python: 3.4
       env: DB=mysql DJANGO="Django>=1.7,<1.8"
